@@ -16,16 +16,16 @@ public class UIFeedbackManager : MonoBehaviour
         Debug.Log("UIFeedbackManager Awake");
     }
 
+    // In UIFeedbackManager class
     public void ShowWhiteShadow(GameObject shadow)
     {
         shadow.SetActive(true);
         currentShadow = shadow;
-        Invoke(nameof(HideWhiteShadow), 0.2f);
-
         Debug.Log("ShowWhiteShadow");
     }
 
-    private void HideWhiteShadow()
+    // Change from private to public
+    public void HideWhiteShadow()
     {
         if (currentShadow != null)
         {
