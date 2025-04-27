@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,10 +39,10 @@ public class DialogueManager : MonoBehaviour
     public Image characterImage;
     public Image backgroundImage;
 
-    //[Header("Choice Menu")]
-    //public GameObject choiceMenu; // Yes/No選單
-    //public Button yesButton;
-    //public Button noButton;
+    [Header("Choice Menu")]
+    public GameObject choiceMenu; // Yes/No選單
+    public Button yesButton;
+    public Button noButton;
 
     [Header("Dialogue Settings")]
     public float typingSpeed = 0.03f;
@@ -95,7 +96,7 @@ public class DialogueManager : MonoBehaviour
                     else
                     {
                         dialogueBox.SetActive(false);
-                        //ShowChoiceMenu();
+                        ShowChoiceMenu();
                     }
                 }
             }
@@ -325,26 +326,26 @@ public class DialogueManager : MonoBehaviour
 
     void ShowChoiceMenu()
     {
-        //choiceMenu.SetActive(true);
+        choiceMenu.SetActive(true);
 
-        //yesButton.onClick.RemoveAllListeners();
-        //noButton.onClick.RemoveAllListeners();
+        yesButton.onClick.RemoveAllListeners();
+        noButton.onClick.RemoveAllListeners();
 
-        //yesButton.onClick.AddListener(OnYesClicked);
-        //noButton.onClick.AddListener(OnNoClicked);
+        yesButton.onClick.AddListener(OnYesClicked);
+        noButton.onClick.AddListener(OnNoClicked);
     }
 
     void OnYesClicked()
     {
         Debug.Log("玩家選了 YES");
         // 進入下一關
-        SceneManager.LoadScene("level01"); // 換成你的下一關名字
+        ChangeSceneManager.Instance.onChangeScene(2); // 換成你的下一關名字
     }
 
     void OnNoClicked()
     {
         Debug.Log("玩家選了 NO");
         // 進入Bad Ending 或直接結束
-        SceneManager.LoadScene("GameOver"); // 換成你的結束場景名字
+        ChangeSceneManager.Instance.onChangeScene(4); // 換成你的結束場景名字
     }
 }
