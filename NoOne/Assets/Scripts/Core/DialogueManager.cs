@@ -16,6 +16,10 @@ public class DialogueBlock
 
 public class DialogueManager : MonoBehaviour
 {
+    [Header("Fade Control")]
+    public CanvasGroup characterCanvasGroup; // Attach to the character Image
+    public CanvasGroup dialogueBoxCanvasGroup; // Attach to the dialogue box
+
     [Header("Sprites")]
     public Sprite talk00;
     public Sprite talk01;
@@ -57,10 +61,15 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
+        characterCanvasGroup.alpha = 0;
+        dialogueBoxCanvasGroup.alpha = 0;
+        characterImage.gameObject.SetActive(true);
+        dialogueBox.SetActive(true);
+
         currentBlockIndex = 0;
         currentTextIndex = 0;
         SetupDialogueBlocks();
-        StartCoroutine(TypeLine());
+        StartCoroutine(FadeInSequence());
     }
 
 
@@ -103,6 +112,29 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    IEnumerator FadeInSequence()
+    {
+        yield return new WaitForSeconds(0.5f); // Wait 1 second
+        yield return StartCoroutine(FadeCanvasGroup(characterCanvasGroup, 0f, 1f, 0.75f)); // Fade in player over 1 sec
+
+        yield return new WaitForSeconds(0.5f); // Wait another second
+        yield return StartCoroutine(FadeCanvasGroup(dialogueBoxCanvasGroup, 0f, 1, 0.75f)); // Fade in dialogue box over 1 sec
+
+        yield return new WaitForSeconds(0.5f); // Wait 1 second
+        StartCoroutine(TypeLine()); // Start showing dialogue
+    }
+    IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float duration)
+    {
+        float elapsed = 0f;
+        cg.alpha = start;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            cg.alpha = Mathf.Lerp(start, end, elapsed / duration);
+            yield return null;
+        }
+        cg.alpha = end;
+    }
     IEnumerator TypeLine()
     {
         isTyping = true;
@@ -166,11 +198,8 @@ public class DialogueManager : MonoBehaviour
         {
             new DialogueBlock{
                 texts = new string[]{
-                    "你好...我叫糯米",
-                    "很高興認識你...",
-                    "爸爸媽媽已經很久沒回家了",
-                    "今天保姆姐姐也有事不能來陪我...",
-                    "今天只有我們呢..."
+                    "你好...我叫糯米\n很高興認識你...",
+                    "爸爸媽媽已經很久沒回家了\n今天保姆姐姐也有事不能來陪我...\n今天只有我們呢...",
                 },
                 characterSprites = new Sprite[]{ talk01, talk00 },
                 backgroundSprite = bgRoom,
@@ -182,16 +211,9 @@ public class DialogueManager : MonoBehaviour
                 backgroundSprite = bgRoom,
                 hideCharacter = false
             },
-             new DialogueBlock{
-                texts = new string[]{ "我有好多好多玩偶！", },
-                characterSprites = new Sprite[]{ talk01, talk00   },
-                backgroundSprite = bgRoom,
-                hideCharacter = false
-            },
             new DialogueBlock{
                 texts = new string[]{
-                    "爸爸媽媽不在的時候他們會陪著我...",
-                    "他們是沒有人時的好朋友...",
+                    "我有好多好多玩偶！\n爸爸媽媽不在的時候他們會陪著我...\n他們是沒有人時的好朋友...",
                 },
                 characterSprites = new Sprite[]{  talk003, talk001  },
                 backgroundSprite = bgRoom,
@@ -199,27 +221,15 @@ public class DialogueManager : MonoBehaviour
             },
              new DialogueBlock{
                 texts = new string[]{
-                     "他們毛茸茸的超可愛..我猜...你也一定會喜歡...",
+                     "他們毛茸茸的超可愛..我猜...你也一定會喜歡...\n我來向你介紹他們吧...",
                 },
                 characterSprites = new Sprite[]{ talk005 },
                 backgroundSprite = bgRoom,
                 hideCharacter = false
             },
-              new DialogueBlock{
-                texts = new string[]{
-                    
-                    "我來向你介紹他們吧..."
-                },
-                characterSprites = new Sprite[]{ talk003, talk001 },
-                backgroundSprite = bgRoom,
-                hideCharacter = false
-            },
             new DialogueBlock{
                 texts = new string[]{
-                    "你看你看我有好多熊熊玩偶...",
-                    "在我很舒服的小床上有...",
-                    "章魚...山藥...睡着的小熊www",
-                    "床旁邊還有可愛小蛇和小貓..."
+                    "你看你看我有好多熊熊玩偶...\n在我很舒服的小床上有...\n章魚...山藥...睡着的小熊www\n床旁邊還有可愛小蛇和小貓...",
                 },
                 characterSprites = null,
                 backgroundSprite = bgRoom,
@@ -227,10 +237,7 @@ public class DialogueManager : MonoBehaviour
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "我還非常喜歡看書...書中的故事真的好有趣...",
-                    "你看...整面墻的書都是爸爸媽媽買給我的www…",
-                    "我常常在小毯子上面看書呢！",
-                    "我們來一起看有趣的書吧~！"
+                    "我還非常喜歡看書...書中的故事真的好有趣...\n你看...整面墻的書都是爸爸媽媽買給我的www...\n我常常在小毯子上面看書呢！\n我們來一起看有趣的書吧~！",
                 },
                 characterSprites = new Sprite[]{ talk003, talk001 },
                 backgroundSprite = bgRoom,
@@ -238,25 +245,16 @@ public class DialogueManager : MonoBehaviour
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "今天的書特別有趣呢..",
-                    "平時都沒有人陪我一起看...",
+                    "今天的書特別有趣呢..\n平時都沒有人陪我一起看...\n如果爸爸媽媽也在就好了",
                 },
                 characterSprites = new Sprite[]{ talk003, talk001 },
                 backgroundSprite = bgRoom,
                 hideCharacter = false
             },
-             new DialogueBlock{
-                texts = new string[]{
-                    "如果爸爸媽媽也在就好了"
-                },
-                characterSprites = new Sprite[]{ talk002 },
-                backgroundSprite = bgRoom,
-                hideCharacter = false
-            },
             new DialogueBlock{
                 texts = new string[]{
-                    "咕嚕嚕...",
-                    "咕嚕嚕...咕嚕嚕...",
+                    "咕嚕嚕...\n咕嚕嚕...咕嚕嚕...\n好像是糯米的肚子在叫...",
+                    "",
                 },
                 characterSprites = new Sprite[]{ talk006 },
                 backgroundSprite = bgRoom,
@@ -264,28 +262,23 @@ public class DialogueManager : MonoBehaviour
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "好像是糯米的肚子在叫..."
+                    "今天保姆姐姐好像不來了呢...\n那今天，我自己來試試看吧...\n應該不會很難吧...應該...",
                 },
-                characterSprites = new Sprite[]{ talk01, talk00,  },
+                characterSprites = new Sprite[]{ talk01, talk00, },
                 backgroundSprite = bgRoom,
                 hideCharacter = false
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "今天保姆姐姐好像不來了呢...",
-                    "那今天，我自己來試試看吧...",
-                    "應該不會很難吧...應該..."
+                    "lalalalalala…踩上小椅子就可以啦\n嗯...先開火....\n好耶...成功啦\n加點油吧....唔...",
                 },
-                characterSprites = new Sprite[]{ talk01, talk000, },
-                backgroundSprite = bgRoom,
+                characterSprites = new Sprite[]{talk003, talk001 },
+                backgroundSprite = bgKitchen,
                 hideCharacter = false
             },
-            new DialogueBlock{
+             new DialogueBlock{
                 texts = new string[]{
-                    "lalalalalala…踩上小椅子就可以啦",
-                    "嗯...先開火....",
-                    "好耶...成功啦",
-                    "加點油吧....唔..."
+                    "怎麽這麽重呀...\n呀....啊啊啊...油撒出來了...\n怎麽辦呀...咳咳咳...",
                 },
                 characterSprites = new Sprite[]{talk003, talk001 },
                 backgroundSprite = bgKitchen,
@@ -293,9 +286,7 @@ public class DialogueManager : MonoBehaviour
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "咳咳咳...",
-                    "好黑呀...咳咳咳...",
-                    "糯米不能呼吸了...咳咳咳..."
+                    "咳咳咳...\n好黑呀...咳咳咳...\n糯米不能呼吸了...咳咳咳...",
                 },
                 characterSprites = new Sprite[]{ talk006 },
                 backgroundSprite = bgKitchenFire,
@@ -303,9 +294,7 @@ public class DialogueManager : MonoBehaviour
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "嗚嗚嗚...",
-                    "這裏是哪裏呀...",
-                    "咦...?... "
+                    "嗚嗚嗚...\n這裏是哪裏呀...\n咦...?...",
                 },
                 characterSprites = new Sprite[]{ talk002 },
                 backgroundSprite = bgLevel00,
@@ -313,11 +302,9 @@ public class DialogueManager : MonoBehaviour
             },
             new DialogueBlock{
                 texts = new string[]{
-                    "那是我的山藥玩偶嗎...？",
-                    "但...看起來好像不太一樣...",
-                    "要不要走進看看呢...?"
+                    "那是我的山藥玩偶嗎...？\n但...看起來好像不太一樣...\n要不要走進看看呢...?",
                 },
-                characterSprites = new Sprite[]{ talk01, talk000,  },
+                characterSprites = new Sprite[]{ talk01, talk00,  },
                 backgroundSprite = bgLevel00,
                 hideCharacter = false
             }

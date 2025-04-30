@@ -497,6 +497,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57afcc03692319b41a8ab0be9bf89f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCanvasGroup: {fileID: 988200862}
+  dialogueBoxCanvasGroup: {fileID: 2006551929}
   talk00: {fileID: 21300000, guid: 42a3db047471ae949bb5424fefefa2c2, type: 3}
   talk01: {fileID: 21300000, guid: 968f71291f8e6d1428ff61377618686c, type: 3}
   talk000: {fileID: 21300000, guid: f9b02c304bf770d40bb3de2ef61fa667, type: 3}
@@ -591,7 +593,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 6bae6eb6cead91348b36974d0644c746, type: 3}
     m_FontSize: 48
     m_FontStyle: 0
     m_BestFit: 0
@@ -799,6 +801,7 @@ GameObject:
   - component: {fileID: 988200861}
   - component: {fileID: 988200860}
   - component: {fileID: 988200859}
+  - component: {fileID: 988200862}
   m_Layer: 5
   m_Name: lige
   m_TagString: Untagged
@@ -860,9 +863,21 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 515.4678, y: -79.07188}
+  m_AnchoredPosition: {x: 640, y: -79.072}
   m_SizeDelta: {x: 569.4562, y: 921.8554}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &988200862
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988200858}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1008197376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,6 +1201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2006551928}
+  - component: {fileID: 2006551929}
   m_Layer: 5
   m_Name: dialogue_box
   m_TagString: Untagged
@@ -1212,9 +1228,21 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00054932, y: -259}
-  m_SizeDelta: {x: 1548.2, y: 469.33}
+  m_AnchoredPosition: {x: 0, y: -288}
+  m_SizeDelta: {x: 1459.5398, y: 442.453}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2006551929
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006551927}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2067090161
 GameObject:
   m_ObjectHideFlags: 0
