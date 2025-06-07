@@ -16,6 +16,9 @@ EditorBuildSettings:
     guid: f7ec021a6964cb149a9215b91c33962a
   - enabled: 1
     path: Assets/Scenes/level02.unity
+    guid: 88d503034658f644eb6007610d606748
+  - enabled: 1
+    path: Assets/Scenes/level03.unity
     guid: 56f52d84859b1844297d36633a1a319e
   - enabled: 1
     path: Assets/Scenes/BadEnd.unity
