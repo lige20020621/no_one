@@ -1,13 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+[System.Serializable]
 public class Level3DialogueBlock
 {
-    public string text;                  // ????
-    public SpeakerType speaker;          // ????
-    public string speakerName;           // ???????????????
-    public float displaySpeed = 0.05f;   // ??????????
+    public string text;                  // 對話內容
+    public SpeakerType speaker;          // 誰在說話
+    public string speakerName;           // 說話者的名字（可選，用於顯示）
+    public float displaySpeed = 0.05f;   // 文字顯示速度（可選）
 }
 
 public class MazeDialogueManager : MonoBehaviour
@@ -16,6 +17,9 @@ public class MazeDialogueManager : MonoBehaviour
     public GameObject dialoguePanel;
     public Text dialogueText;
     public Text speakerNameText;
+
+    [Header("Debug Settings")]
+    public bool enableDebugLogs = true;
 
     private Level3DialogueBlock[] currentDialogue;
     private int currentBlockIndex = 0;
@@ -28,11 +32,34 @@ public class MazeDialogueManager : MonoBehaviour
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(false);
+            if (enableDebugLogs) Debug.Log("MazeDialogueManager: Dialogue panel initialized and hidden");
+        }
+        else
+        {
+            Debug.LogError("MazeDialogueManager: Dialogue panel is not assigned!");
+        }
+
+        if (dialogueText == null)
+        {
+            Debug.LogError("MazeDialogueManager: Dialogue text is not assigned!");
+        }
+
+        if (speakerNameText == null)
+        {
+            Debug.LogError("MazeDialogueManager: Speaker name text is not assigned!");
         }
     }
 
     public void StartDialogue(Level3DialogueBlock[] dialogue, System.Action onComplete = null)
     {
+        if (enableDebugLogs) Debug.Log($"MazeDialogueManager: StartDialogue called with {dialogue?.Length ?? 0} dialogue blocks");
+
+        if (dialogue == null || dialogue.Length == 0)
+        {
+            Debug.LogError("MazeDialogueManager: Dialogue array is null or empty!");
+            return;
+        }
+
         currentDialogue = dialogue;
         currentBlockIndex = 0;
         onDialogueComplete = onComplete;
@@ -40,6 +67,12 @@ public class MazeDialogueManager : MonoBehaviour
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(true);
+            if (enableDebugLogs) Debug.Log("MazeDialogueManager: Dialogue panel activated");
+        }
+        else
+        {
+            Debug.LogError("MazeDialogueManager: Cannot show dialogue - panel is null!");
+            return;
         }
 
         DisplayCurrentDialogueBlock();
@@ -50,6 +83,8 @@ public class MazeDialogueManager : MonoBehaviour
         if (currentBlockIndex < currentDialogue.Length)
         {
             Level3DialogueBlock block = currentDialogue[currentBlockIndex];
+
+            if (enableDebugLogs) Debug.Log($"MazeDialogueManager: Displaying block {currentBlockIndex}: '{block.text}' by {block.speakerName}");
 
             // Update speaker name
             if (speakerNameText != null)
@@ -66,6 +101,7 @@ public class MazeDialogueManager : MonoBehaviour
         }
         else
         {
+            if (enableDebugLogs) Debug.Log("MazeDialogueManager: All dialogue blocks completed, ending dialogue");
             EndDialogue();
         }
     }
@@ -73,12 +109,20 @@ public class MazeDialogueManager : MonoBehaviour
     IEnumerator TypeText(string text, float typingSpeed)
     {
         isDisplayingText = true;
-        dialogueText.text = "";
 
-        foreach (char letter in text.ToCharArray())
+        if (dialogueText != null)
         {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(typingSpeed);
+            dialogueText.text = "";
+
+            foreach (char letter in text.ToCharArray())
+            {
+                dialogueText.text += letter;
+                yield return new WaitForSeconds(typingSpeed);
+            }
+        }
+        else
+        {
+            Debug.LogError("MazeDialogueManager: Cannot display text - dialogueText is null!");
         }
 
         isDisplayingText = false;
@@ -89,6 +133,8 @@ public class MazeDialogueManager : MonoBehaviour
     {
         if (dialoguePanel != null && dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
+            if (enableDebugLogs) Debug.Log("MazeDialogueManager: Space key pressed during dialogue");
+
             if (isDisplayingText)
             {
                 // Skip typing and show full text
@@ -97,13 +143,20 @@ public class MazeDialogueManager : MonoBehaviour
                     StopCoroutine(typingCoroutine);
                     typingCoroutine = null;
                 }
-                dialogueText.text = currentDialogue[currentBlockIndex].text;
+
+                if (dialogueText != null && currentDialogue != null && currentBlockIndex < currentDialogue.Length)
+                {
+                    dialogueText.text = currentDialogue[currentBlockIndex].text;
+                }
+
                 isDisplayingText = false;
+                if (enableDebugLogs) Debug.Log("MazeDialogueManager: Skipped typing animation");
             }
             else
             {
                 // Move to next dialogue block
                 currentBlockIndex++;
+                if (enableDebugLogs) Debug.Log($"MazeDialogueManager: Moving to next dialogue block: {currentBlockIndex}");
                 DisplayCurrentDialogueBlock();
             }
         }
@@ -111,12 +164,22 @@ public class MazeDialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
+        if (enableDebugLogs) Debug.Log("MazeDialogueManager: EndDialogue called");
+
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(false);
         }
 
         // Invoke completion callback
-        onDialogueComplete?.Invoke();
+        if (onDialogueComplete != null)
+        {
+            if (enableDebugLogs) Debug.Log("MazeDialogueManager: Invoking dialogue completion callback");
+            onDialogueComplete.Invoke();
+        }
+        else
+        {
+            if (enableDebugLogs) Debug.Log("MazeDialogueManager: No completion callback to invoke");
+        }
     }
 }

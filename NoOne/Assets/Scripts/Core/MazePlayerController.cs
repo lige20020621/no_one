@@ -1,4 +1,3 @@
-// MazePlayerController.cs - Simplified player controller for maze navigation
 using UnityEngine;
 
 public class MazePlayerController : MonoBehaviour
@@ -15,6 +14,7 @@ public class MazePlayerController : MonoBehaviour
     [Header("Collision Settings")]
     public LayerMask wallLayerMask = -1; // Which layers count as walls
     public float collisionCheckDistance = 0.6f; // How far ahead to check for walls
+    public float playerColliderRadius = 0.6f; // Player collider size
 
     private SpriteRenderer spriteRenderer;
     private Vector2 movement;
@@ -26,22 +26,48 @@ public class MazePlayerController : MonoBehaviour
     private float animationTimer = 0f;
     private bool useFirstMoveSprite = true;
 
-    void Start()
+    void Awake()
     {
+        // Add Rigidbody2D
+        Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 0f; // No gravity
+            rb.freezeRotation = true; // No spinning
+            rb.drag = 5f; // Optional: smooth stopping
+        }
+
+        // Setup sprite renderer first
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
 
-        // Add collider for the player
-        if (GetComponent<Collider2D>() == null)
-        {
-            CircleCollider2D playerCollider = gameObject.AddComponent<CircleCollider2D>();
-            playerCollider.radius = 0.3f; // Adjust size as needed
-        }
+        // Setup player collider only if it doesn't exist
+        //CircleCollider2D playerCollider = GetComponent<CircleCollider2D>();
+        //if (playerCollider == null)
+        //{
+        //    playerCollider = gameObject.AddComponent<CircleCollider2D>();
+        //    playerCollider.radius = playerColliderRadius;
+        //    playerCollider.isTrigger = false; // Player collider should NOT be trigger
+        //    Debug.Log("MazePlayerController: Added CircleCollider2D to player");
+        //}
+        //else
+        //{
+        //    // Update existing collider settings
+        //    playerCollider.radius = playerColliderRadius;
+        //    playerCollider.isTrigger = false;
+        //}
 
-        spriteRenderer.sprite = idleSprite;
+        //spriteRenderer.sprite = idleSprite;
+    }
+
+    void Start()
+    {
+        // Awake already handled initialization
+        Debug.Log("MazePlayerController: Player initialized successfully");
     }
 
     void Update()
@@ -162,7 +188,10 @@ public class MazePlayerController : MonoBehaviour
     public void DisableMovement()
     {
         canMove = false;
-        spriteRenderer.sprite = idleSprite;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = idleSprite;
+        }
     }
 
     public void EnableMovement()
@@ -183,5 +212,9 @@ public class MazePlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(pos + Vector2.left * collisionCheckDistance, 0.2f);
         Gizmos.DrawWireSphere(pos + Vector2.up * collisionCheckDistance, 0.2f);
         Gizmos.DrawWireSphere(pos + Vector2.down * collisionCheckDistance, 0.2f);
+
+        // Show player collider
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, playerColliderRadius);
     }
 }

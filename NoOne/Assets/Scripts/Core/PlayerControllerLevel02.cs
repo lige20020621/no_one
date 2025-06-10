@@ -8,6 +8,11 @@ public class PlayerControllerLevel02 : MonoBehaviour
     public Sprite moveSprite2;
     public Sprite hitSprite;
 
+
+    [Header("Collision Settings")]
+    public LayerMask wallLayerMask = 1 << 3; // Wall layer only (Layer 3)
+    public float collisionCheckDistance = 0.6f; // How far ahead to check for walls
+
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float animationSpeed = 0.5f;
@@ -46,11 +51,25 @@ public class PlayerControllerLevel02 : MonoBehaviour
 
     void HandleInput()
     {
-        // Get input
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        // Get raw input from player
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
 
-        // Check if moving
+        // Create intended movement vector
+        Vector2 intendedMovement = new Vector2(inputX, inputY);
+
+        // Apply wall collision check to prevent going outside screen
+        if (intendedMovement.magnitude > 0)
+        {
+            Vector2 checkedMovement = CheckWallCollision(intendedMovement);
+            movement = checkedMovement;
+        }
+        else
+        {
+            movement = Vector2.zero;
+        }
+
+        // Check if we're actually moving (after wall collision check)
         isMoving = movement.magnitude > 0;
 
         // Check for hit input (Space key)
@@ -58,6 +77,36 @@ public class PlayerControllerLevel02 : MonoBehaviour
         {
             StartCoroutine(PerformHit());
         }
+    }
+
+    Vector2 CheckWallCollision(Vector2 intendedMovement)
+    {
+        Vector2 currentPos = transform.position;
+        Vector2 allowedMovement = Vector2.zero;
+
+        // Check horizontal movement
+        if (intendedMovement.x != 0)
+        {
+            Vector2 horizontalTarget = currentPos + Vector2.right * Mathf.Sign(intendedMovement.x) * collisionCheckDistance;
+
+            if (!Physics2D.OverlapCircle(horizontalTarget, 0.2f, wallLayerMask))
+            {
+                allowedMovement.x = intendedMovement.x;
+            }
+        }
+
+        // Check vertical movement
+        if (intendedMovement.y != 0)
+        {
+            Vector2 verticalTarget = currentPos + Vector2.up * Mathf.Sign(intendedMovement.y) * collisionCheckDistance;
+
+            if (!Physics2D.OverlapCircle(verticalTarget, 0.2f, wallLayerMask))
+            {
+                allowedMovement.y = intendedMovement.y;
+            }
+        }
+
+        return allowedMovement;
     }
 
     void HandleMovement()
