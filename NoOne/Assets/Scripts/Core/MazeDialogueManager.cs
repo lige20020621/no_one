@@ -27,6 +27,18 @@ public class MazeDialogueManager : MonoBehaviour
     private System.Action onDialogueComplete;
     private Coroutine typingCoroutine;
 
+
+    [Header("Typing Audio")]
+    public AudioClip typingSound;
+    public AudioSource typingAudioSource;
+    public float typingVolume = 0.2f;
+    public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
+
+    [Header("Next Block Audio")]
+    public AudioClip nextBlockSound;
+    public AudioSource nextBlockAudioSource;
+    public float nextBlockVolume = 0.5f; 
+
     void Start()
     {
         if (dialoguePanel != null)
@@ -48,6 +60,32 @@ public class MazeDialogueManager : MonoBehaviour
         {
             Debug.LogError("MazeDialogueManager: Speaker name text is not assigned!");
         }
+
+        SetupAudio();
+    }
+
+    void SetupAudio()
+    {
+        // Setup typing audio source
+        if (typingAudioSource == null)
+        {
+            GameObject typingGO = new GameObject("TypingAudioSource");
+            typingGO.transform.SetParent(transform);
+            typingAudioSource = typingGO.AddComponent<AudioSource>();
+        }
+        typingAudioSource.loop = true; // For continuous typing sound
+        typingAudioSource.volume = typingVolume;
+
+        // Setup next block audio source
+        if (nextBlockAudioSource == null)
+        {
+            GameObject nextBlockGO = new GameObject("NextBlockAudioSource");
+            nextBlockGO.transform.SetParent(transform);
+            nextBlockAudioSource = nextBlockGO.AddComponent<AudioSource>();
+        }
+        nextBlockAudioSource.loop = false;
+        nextBlockAudioSource.volume = nextBlockVolume;
+
     }
 
     public void StartDialogue(Level3DialogueBlock[] dialogue, System.Action onComplete = null)
@@ -76,6 +114,37 @@ public class MazeDialogueManager : MonoBehaviour
         }
 
         DisplayCurrentDialogueBlock();
+    }
+
+    void PlayNextBlockSound()
+    {
+        if (nextBlockSound != null && nextBlockAudioSource != null)
+        {
+            // Stop typing sound
+            StopTyping();
+            nextBlockAudioSource.PlayOneShot(nextBlockSound);
+        }
+    }
+
+    void StartTypingSound()
+    {
+        if (typingSound != null && typingAudioSource != null)
+        {
+            if (!playTypingSoundOnEveryChar)
+            {
+                // Play continuous typing sound
+                typingAudioSource.clip = typingSound;
+                typingAudioSource.Play();
+            }
+        }
+    }
+
+    void StopTyping()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
+        }
     }
 
     void DisplayCurrentDialogueBlock()
@@ -114,11 +183,18 @@ public class MazeDialogueManager : MonoBehaviour
         {
             dialogueText.text = "";
 
+            // Start typing sound
+            StartTypingSound();
+
             foreach (char letter in text.ToCharArray())
             {
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(typingSpeed);
             }
+
+
+            // Stop typing sound
+            StopTyping();
         }
         else
         {
@@ -134,7 +210,7 @@ public class MazeDialogueManager : MonoBehaviour
         if (dialoguePanel != null && dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
             if (enableDebugLogs) Debug.Log("MazeDialogueManager: Space key pressed during dialogue");
-
+            PlayNextBlockSound();
             if (isDisplayingText)
             {
                 // Skip typing and show full text

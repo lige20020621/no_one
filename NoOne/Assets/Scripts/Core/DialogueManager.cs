@@ -59,6 +59,25 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping;
     private Coroutine spriteSwitchCoroutine;
 
+    [Header("Audio")]
+    public AudioSource musicSource;
+    public AudioClip normalMusic;
+    public AudioClip fireMusic;
+    public AudioClip startMusic;
+    public float musicFadeTime = 0.5f;
+    public float backgroundMusicVolume = 0.3f;
+
+    [Header("Typing Audio")]
+    public AudioClip typingSound;
+    public AudioSource typingAudioSource;
+    public float typingVolume = 0.2f;
+    public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
+
+    [Header("Next Block Audio")]
+    public AudioClip nextBlockSound;
+    public AudioSource nextBlockAudioSource;
+    public float nextBlockVolume = 0.5f;
+
     void Start()
     {
         characterCanvasGroup.alpha = 0;
@@ -70,16 +89,100 @@ public class DialogueManager : MonoBehaviour
         currentTextIndex = 0;
         SetupDialogueBlocks();
         StartCoroutine(FadeInSequence());
+        // Setup audio
+        if (musicSource == null)
+            musicSource = gameObject.AddComponent<AudioSource>();
+
+        // Play background music
+        if (normalMusic != null)
+        {
+            musicSource.clip = normalMusic;
+            musicSource.loop = true;
+            musicSource.volume = 0.3f;
+            musicSource.Play();
+        }
+        SetupAudio();
     }
 
+    void SetupAudio()
+    {
+        // Setup main music source
+        if (musicSource == null)
+        {
+            GameObject musicGO = new GameObject("MusicSource");
+            musicGO.transform.SetParent(transform);
+            musicSource = musicGO.AddComponent<AudioSource>();
+        }
+        musicSource.loop = true;
+        musicSource.volume = backgroundMusicVolume;
+
+        // Setup typing audio source
+        if (typingAudioSource == null)
+        {
+            GameObject typingGO = new GameObject("TypingAudioSource");
+            typingGO.transform.SetParent(transform);
+            typingAudioSource = typingGO.AddComponent<AudioSource>();
+        }
+        typingAudioSource.loop = true; // For continuous typing sound
+        typingAudioSource.volume = typingVolume;
+
+        // Setup next block audio source
+        if (nextBlockAudioSource == null)
+        {
+            GameObject nextBlockGO = new GameObject("NextBlockAudioSource");
+            nextBlockGO.transform.SetParent(transform);
+            nextBlockAudioSource = nextBlockGO.AddComponent<AudioSource>();
+        }
+        nextBlockAudioSource.loop = false;
+        nextBlockAudioSource.volume = nextBlockVolume;
+
+        // Play initial background music
+        if (normalMusic != null)
+        {
+            musicSource.clip = normalMusic;
+            musicSource.Play();
+        }
+    }
+
+    void PlayNextBlockSound()
+    {
+        if (nextBlockSound != null && nextBlockAudioSource != null)
+        {
+            nextBlockAudioSource.PlayOneShot(nextBlockSound);
+        }
+    }
+
+    void StartTypingSound()
+    {
+        if (typingSound != null && typingAudioSource != null)
+        {
+            if (!playTypingSoundOnEveryChar)
+            {
+                // Play continuous typing sound
+                typingAudioSource.clip = typingSound;
+                typingAudioSource.Play();
+            }
+        }
+    }
+
+    void StopTyping()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
+        }
+    }
 
     void Update()
     {
         if (dialogueBox.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
+            PlayNextBlockSound();
+
             if (isTyping)
             {
                 StopAllCoroutines();
+                StopTyping();
                 dialogueText.text = dialogueBlocks[currentBlockIndex].texts[currentTextIndex];
                 isTyping = false;
                 if (spriteSwitchCoroutine != null)
@@ -146,6 +249,9 @@ public class DialogueManager : MonoBehaviour
         if (block.backgroundSprite != null)
         {
             backgroundImage.sprite = block.backgroundSprite;
+
+            // Check if we need to change music
+            HandleMusicChange(block.backgroundSprite);
         }
 
         // 設定人物
@@ -166,12 +272,17 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
+        // Start typing sound
+        StartTypingSound();
+
         foreach (char c in block.texts[currentTextIndex].ToCharArray())
         {
             dialogueText.text += c;
             yield return new WaitForSeconds(typingSpeed);
         }
 
+        // Stop typing sound
+        StopTyping();
         isTyping = false;
 
         if (spriteSwitchCoroutine != null)
@@ -311,6 +422,55 @@ public class DialogueManager : MonoBehaviour
         };
     }
 
+    void HandleMusicChange(Sprite newBackground)
+    {
+        AudioClip targetMusic = null;
+
+        // Determine which music to play based on background
+        if (newBackground == bgKitchenFire)
+        {
+            targetMusic = fireMusic;
+        }
+        else if(newBackground == bgLevel00)
+        {
+            targetMusic = startMusic;
+        }
+        else
+        {
+            targetMusic = normalMusic;
+        }
+
+        // Change music if different from current
+        if (targetMusic != null && musicSource.clip != targetMusic)
+        {
+            StartCoroutine(CrossfadeMusic(targetMusic));
+        }
+    }
+
+    IEnumerator CrossfadeMusic(AudioClip newClip)
+    {
+        // Fade out current music
+        float startVolume = musicSource.volume;
+
+        while (musicSource.volume > 0)
+        {
+            musicSource.volume -= startVolume * Time.deltaTime / musicFadeTime;
+            yield return null;
+        }
+
+        // Change clip and fade in
+        musicSource.clip = newClip;
+        musicSource.Play();
+
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += startVolume * Time.deltaTime / musicFadeTime;
+            yield return null;
+        }
+
+        musicSource.volume = startVolume;
+    }
+
     void ShowChoiceMenu()
     {
         choiceMenu.SetActive(true);
@@ -333,6 +493,6 @@ public class DialogueManager : MonoBehaviour
     {
         Debug.Log("玩家選了 NO");
         // 進入Bad Ending 或直接結束
-        ChangeSceneManager.Instance.onChangeScene(4); // 換成你的結束場景名字
+        ChangeSceneManager.Instance.onChangeScene(5,"content","未能鼓起勇氣的糯米，沒能踏出第一步，沒能接近山藥玩偶\n也沒能等到接她回家的那個人，永遠的迷失在，這個奇怪的無限長廊當中...");
     }
 }

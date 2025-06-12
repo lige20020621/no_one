@@ -899,6 +899,13 @@ MonoBehaviour:
   backgroundImage: {fileID: 285713612}
   dialoguePanel: {fileID: 1842152616}
   resultPanel: {fileID: 84694074}
+  typingSound: {fileID: 8300000, guid: 52988d954978e2f42a478762c72d8db6, type: 3}
+  typingAudioSource: {fileID: 0}
+  typingVolume: 0.2
+  playTypingSoundOnEveryChar: 0
+  nextBlockSound: {fileID: 8300000, guid: 515155760ec134945a84635db3a64528, type: 3}
+  nextBlockAudioSource: {fileID: 0}
+  nextBlockVolume: 0.5
 --- !u!4 &652781534
 Transform:
   m_ObjectHideFlags: 0
@@ -1060,6 +1067,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &759502474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 759502476}
+  - component: {fileID: 759502475}
+  m_Layer: 0
+  m_Name: ChangeSceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &759502475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759502474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afd38f247ce16bc4e956201c9c16a68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &759502476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759502474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 535.604, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &874710762
 GameObject:
@@ -1421,6 +1471,8 @@ MonoBehaviour:
   dialoguePanel: {fileID: 1842152616}
   dialogueManager: {fileID: 652781533}
   startDialogueAfterCollection: 1
+  backgroundMusic: {fileID: 8300000, guid: ad71ef255add32f4bb0716f1631993ee, type: 3}
+  audioSource: {fileID: 0}
 --- !u!4 &1263528570
 Transform:
   m_ObjectHideFlags: 0
@@ -1730,6 +1782,8 @@ MonoBehaviour:
   collisionCheckDistance: 0.6
   moveSpeed: 5
   animationSpeed: 0.5
+  backgroundMusic: {fileID: 8300000, guid: ab214f716c6f42942845c846f0bad42b, type: 3}
+  audioSource: {fileID: 0}
 --- !u!60 &1404662409
 PolygonCollider2D:
   m_ObjectHideFlags: 0

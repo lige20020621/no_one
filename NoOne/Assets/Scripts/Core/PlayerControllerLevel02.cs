@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 
 public class PlayerControllerLevel02 : MonoBehaviour
 {
@@ -27,6 +27,10 @@ public class PlayerControllerLevel02 : MonoBehaviour
     private float animationTimer = 0f;
     private bool useFirstMoveSprite = true;
 
+    [Header("Audio")]
+    public AudioClip backgroundMusic;
+    public AudioSource audioSource;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -37,6 +41,10 @@ public class PlayerControllerLevel02 : MonoBehaviour
 
         // Set initial sprite
         spriteRenderer.sprite = idleSprite;
+
+        // Setup audio
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -187,6 +195,14 @@ public class PlayerControllerLevel02 : MonoBehaviour
             OctopusController octopus = collider.GetComponent<OctopusController>();
             if (octopus != null)
             {
+                // Play background music
+                if (backgroundMusic != null)
+                {
+                    audioSource.clip = backgroundMusic;
+                    audioSource.loop = false;
+                    audioSource.volume = 0.3f;
+                    audioSource.Play();
+                }
                 octopus.TakeHit();
                 break; // Hit the octopus
             }

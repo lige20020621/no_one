@@ -188,6 +188,41 @@ public class MazeItemManager : MonoBehaviour
         };
     }
 
+    void HandleDialogueCompletion(int itemID, MazePlayerController playerController)
+    {
+        switch (itemID)
+        {
+            case 2: // Brain (大腦) - Show question panel
+                if (enableDebugLogs) Debug.Log("MazeItemManager: Brain dialogue completed, showing question panel");
+                ShowQuestionPanel();
+                break;
+
+            case 3: // Snake (巨蛇) - Go to next scene
+                if (enableDebugLogs) Debug.Log("MazeItemManager: Snake dialogue completed, going to next scene");
+                GoToNextScene();
+                break;
+
+            default: // Other items - Just re-enable movement and check completion
+                if (enableDebugLogs) Debug.Log($"MazeItemManager: Item {itemID} dialogue completed, re-enabling movement");
+                if (playerController != null)
+                {
+                    playerController.EnableMovement();
+                }
+                CheckAllItemsCollected();
+                break;
+        }
+    }
+
+    void GoToNextScene()
+    {
+
+        // Optional: Pass parameters to next scene
+        ChangeSceneManager.Instance.onChangeScene(6);
+
+        // Alternative: Just change scene without parameters
+        // ChangeSceneManager.Instance.onChangeScene(nextSceneIndex);
+    }
+
     public void OnItemCollected(ItemCollectable item, GameObject player)
     {
         int itemID = item.itemID;
@@ -234,19 +269,7 @@ public class MazeItemManager : MonoBehaviour
                 if (enableDebugLogs) Debug.Log("MazeItemManager: Dialogue completed, re-enabling player movement");
 
                 // Special handling for brain (item ID 2)
-                if (itemID == 2)
-                {
-                    ShowQuestionPanel();
-                }
-                else
-                {
-                    // Re-enable player movement for other items
-                    if (playerController != null)
-                    {
-                        playerController.EnableMovement();
-                    }
-                    CheckAllItemsCollected();
-                }
+                HandleDialogueCompletion(itemID, playerController);
             });
         }
         else

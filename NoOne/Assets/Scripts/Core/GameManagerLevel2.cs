@@ -25,6 +25,12 @@ public class GameManagerLevel2 : MonoBehaviour
     public bool startDialogueAfterCollection = true; // 收集完成後是否開始對話
 
 
+    [Header("Audio")]
+
+    public AudioClip backgroundMusic;
+    public AudioSource audioSource;
+    public float backgroundMusicVolume = 0.3f;
+
     void Awake()
     {
         if (instance == null)
@@ -50,6 +56,19 @@ public class GameManagerLevel2 : MonoBehaviour
 
         if (noButton != null)
             noButton.onClick.AddListener(OnNoClicked);
+
+        // Setup audio
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
+        // Play background music
+        if (backgroundMusic != null)
+        {
+            audioSource.clip = backgroundMusic;
+            audioSource.loop = true;
+            audioSource.volume = backgroundMusicVolume;
+            audioSource.Play();
+        }
     }
 
     public void ShowActionPanel()
@@ -82,8 +101,8 @@ public class GameManagerLevel2 : MonoBehaviour
         // Hide action panel and resume game
         if (actionPanel != null)
             actionPanel.SetActive(false);
+        ChangeSceneManager.Instance.onChangeScene(5, "content", "過去沉痛的教訓，漸漸沉沒在歷史的洋流當中...\n依然還是沒人在乎那些血淚的教訓，最終也沒有人記得..");
 
-        if (playerController != null)
-            playerController.EnableMovement();
+
     }
 }

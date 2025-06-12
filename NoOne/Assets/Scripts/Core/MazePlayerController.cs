@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MazePlayerController : MonoBehaviour
@@ -26,8 +27,14 @@ public class MazePlayerController : MonoBehaviour
     private float animationTimer = 0f;
     private bool useFirstMoveSprite = true;
 
+    // Reset functionality
+    private Vector3 initialPosition;
+
     void Awake()
     {
+        // Store initial position
+        initialPosition = transform.position;
+
         // Add Rigidbody2D
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
         if (rb == null)
@@ -198,6 +205,51 @@ public class MazePlayerController : MonoBehaviour
     {
         canMove = true;
     }
+
+    // Collision detection for wall touching
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if the collision is with a wall
+        if (IsWall(collision.gameObject))
+        {
+            Debug.Log("MazePlayerController: Hit wall! Resetting to initial position");
+            StartCoroutine(ResetToInitialPosition());
+        }
+    }
+
+    bool IsWall(GameObject obj)
+    {
+        // Check if the object is on a wall layer
+        return ((1 << obj.layer) & wallLayerMask) != 0;
+    }
+
+    IEnumerator ResetToInitialPosition()
+    {
+        canMove = false;
+
+        // Wait for reset delay
+        yield return new WaitForSeconds(1);
+
+        // Reset position
+        transform.position = initialPosition;
+
+        // Reset movement state
+        movement = Vector2.zero;
+        lastMovement = Vector2.zero;
+        isMoving = false;
+
+        // Reset sprite to idle
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = idleSprite;
+        }
+
+        // Re-enable movement
+        canMove = true;
+
+        Debug.Log("MazePlayerController: Reset complete");
+    }
+
 
     // Visualize collision check in editor
     void OnDrawGizmosSelected()

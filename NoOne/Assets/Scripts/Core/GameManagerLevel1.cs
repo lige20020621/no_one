@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameManagerLevel1 : MonoBehaviour
@@ -23,6 +24,18 @@ public class GameManagerLevel1 : MonoBehaviour
     public CollectionNotification notificationSystem; // 可選的通知系統
 
 
+    [Header("Audio")]
+
+    public AudioClip backgroundMusic;
+    public AudioSource audioSource;
+    public float backgroundMusicVolume = 0.3f;
+    public AudioClip itemBackgroundMusic;
+    public AudioSource itemAudioSource;
+
+    [Header("Fire Button")]
+    public Button fireButton;
+
+
     void Awake()
     {
         if (instance == null)
@@ -36,6 +49,53 @@ public class GameManagerLevel1 : MonoBehaviour
         // Simplified null checks for IDE0031
         dialogueManager ??= FindObjectOfType<NewDialogueManager>();
         notificationSystem ??= FindObjectOfType<CollectionNotification>();
+
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
+        // Play background music
+        if (backgroundMusic != null)
+        {
+            audioSource.clip = backgroundMusic;
+            audioSource.loop = true;
+            audioSource.volume = backgroundMusicVolume;
+            audioSource.Play();
+        }
+
+        if (itemAudioSource == null)
+            itemAudioSource = gameObject.AddComponent<AudioSource>();
+
+      
+
+        // Setup fire button
+        SetupFireButton();
+
+    }
+
+    private void SetupFireButton()
+    {
+        if (fireButton != null)
+        {
+            // Remove any existing listeners to avoid duplicates
+            fireButton.onClick.RemoveAllListeners();
+
+            // Add the fire button click listener
+            fireButton.onClick.AddListener(OnFireButtonClicked);
+
+            Debug.Log("Fire button setup complete");
+        }
+        else
+        {
+            Debug.LogWarning("Fire button not assigned in inspector!");
+        }
+    }
+
+    public void OnFireButtonClicked()
+    {
+        Debug.Log("Fire button clicked! Changing to scene 5 with content parameter");
+
+        // Change to scene 5 with "content" parameter
+        ChangeSceneManager.Instance.onChangeScene(5, "content", "雖然糯米燒掉了藤曼，但真正原因問未被挖掘，土地的聲音仍然未能被傾聽...");
     }
 
     public void ItemCollected(Item item)
@@ -43,6 +103,14 @@ public class GameManagerLevel1 : MonoBehaviour
         // 檢查物品是否已經被收集
         if (!collectedItems.ContainsKey(item.itemID) || !collectedItems[item.itemID])
         {
+            // Play background music
+            if (itemBackgroundMusic != null)
+            {
+                itemAudioSource.clip = itemBackgroundMusic;
+                itemAudioSource.loop = false;
+                itemAudioSource.volume = 0.3f;
+                itemAudioSource.Play();
+            }
             // 記錄物品已被收集
             collectedItems[item.itemID] = true;
             collectedItemsCount++;

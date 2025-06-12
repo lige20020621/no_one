@@ -19,10 +19,96 @@ public class GameManagerBadEnd : MonoBehaviour
     public bool autoQuitAfterDialogue = true;
     public float quitDelay = 2f; // Delay before quitting
 
+
+    [Header("Audio")]
+
+    public AudioClip backgroundMusic;
+    public AudioSource audioSource;
+    public float backgroundMusicVolume = 0.3f;
+
+    [Header("Typing Audio")]
+    public AudioClip typingSound;
+    public AudioSource typingAudioSource;
+    public float typingVolume = 0.2f;
+    public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
+
+    [Header("Next Block Audio")]
+    public AudioClip nextBlockSound;
+    public AudioSource nextBlockAudioSource;
+    public float nextBlockVolume = 0.5f;
+
     void Start()
     {
+
+        // Setup audio
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
         // Receive and process parameters from previous scene
         ProcessSceneParameters();
+        SetupAudio();
+    }
+
+    void SetupAudio()
+    {
+        // Play background music
+        if (backgroundMusic != null)
+        {
+            audioSource.clip = backgroundMusic;
+            audioSource.loop = true;
+            audioSource.volume = backgroundMusicVolume;
+            audioSource.Play();
+        }
+
+        // Setup typing audio source
+        if (typingAudioSource == null)
+        {
+            GameObject typingGO = new GameObject("TypingAudioSource");
+            typingGO.transform.SetParent(transform);
+            typingAudioSource = typingGO.AddComponent<AudioSource>();
+        }
+        typingAudioSource.loop = true; // For continuous typing sound
+        typingAudioSource.volume = typingVolume;
+
+        // Setup next block audio source
+        if (nextBlockAudioSource == null)
+        {
+            GameObject nextBlockGO = new GameObject("NextBlockAudioSource");
+            nextBlockGO.transform.SetParent(transform);
+            nextBlockAudioSource = nextBlockGO.AddComponent<AudioSource>();
+        }
+        nextBlockAudioSource.loop = false;
+        nextBlockAudioSource.volume = nextBlockVolume;
+
+    }
+
+    void PlayNextBlockSound()
+    {
+        if (nextBlockSound != null && nextBlockAudioSource != null)
+        {
+            nextBlockAudioSource.PlayOneShot(nextBlockSound);
+        }
+    }
+
+    void StartTypingSound()
+    {
+        if (typingSound != null && typingAudioSource != null)
+        {
+            if (!playTypingSoundOnEveryChar)
+            {
+                // Play continuous typing sound
+                typingAudioSource.clip = typingSound;
+                typingAudioSource.Play();
+            }
+        }
+    }
+
+    void StopTyping()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
+        }
     }
 
     void ProcessSceneParameters()
@@ -73,12 +159,17 @@ public class GameManagerBadEnd : MonoBehaviour
         if (dialogueText != null)
         {
             dialogueText.text = "";
+            // Start typing sound
+            StartTypingSound();
 
             foreach (char letter in text.ToCharArray())
             {
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(typingSpeed);
             }
+
+            // Stop typing sound
+            StopTyping();
         }
 
         isDisplayingText = false;
@@ -90,6 +181,7 @@ public class GameManagerBadEnd : MonoBehaviour
         // Handle input to advance or skip dialogue
         if (dialoguePanel != null && dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
+            PlayNextBlockSound();
             if (isDisplayingText)
             {
                 // Skip typing and show full text

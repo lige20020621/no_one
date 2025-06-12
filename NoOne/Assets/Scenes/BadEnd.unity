@@ -581,6 +581,8 @@ MonoBehaviour:
   typingSpeed: 0.05
   autoQuitAfterDialogue: 1
   quitDelay: 5
+  backgroundMusic: {fileID: 8300000, guid: 0ca14d4d495e3ae45abb892561b00539, type: 3}
+  audioSource: {fileID: 0}
 --- !u!4 &1127841369
 Transform:
   m_ObjectHideFlags: 0
