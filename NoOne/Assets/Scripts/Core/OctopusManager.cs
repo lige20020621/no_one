@@ -58,8 +58,8 @@ public class OctopusManager : MonoBehaviour
         }
     }
 
-    // Fix for CS1624: Change the return type of OnAllOctopusesDefeated to IEnumerator to allow it to be an iterator block.
-    System.Collections.IEnumerator OnAllOctopusesDefeated()
+    // Fix for CS0161: Ensure all code paths in OnAllOctopusesDefeated return a value.
+    private System.Collections.IEnumerator OnAllOctopusesDefeated()
     {
         Debug.Log("All 3 octopuses defeated with 3 total hits! Starting secondary dialogue...");
 
@@ -74,9 +74,11 @@ public class OctopusManager : MonoBehaviour
         GameManagerLevel2 gameManager = GameManagerLevel2.instance;
         if (gameManager != null && gameManager.dialogueManager != null)
         {
-            yield return new WaitForSeconds(0.5f);
-            gameManager.dialogueManager.StartSecondaryDialogue();
+            gameManager.ShowActionPanel();
         }
+
+        // Return null to satisfy IEnumerator return type
+        yield return null;
     }
 
     // Optional: Method to reset the game state

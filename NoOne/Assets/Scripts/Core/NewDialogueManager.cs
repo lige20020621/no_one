@@ -8,6 +8,8 @@ public enum SpeakerType
     Player,
     NPC1,
     NPC2,
+    NPC3,
+    NPC4,
     Narrator // 旁白，沒有特定說話者
 }
 

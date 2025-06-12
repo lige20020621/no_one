@@ -13,6 +13,15 @@ public class PlayerMover : MonoBehaviour
     private int currentSpriteIndex = 0;
     private float animationTimer = 0f;
 
+    [Header("Collision Settings")]
+    public LayerMask wallLayerMask = 1 << 3; // Wall layer only (Layer 3)
+    public float collisionCheckDistance = 0.6f; // How far ahead to check for walls
+    public float collisionRadius = 0.3f; // Radius for collision detection
+
+
+    private Rigidbody2D rb2D;
+
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -20,6 +29,14 @@ public class PlayerMover : MonoBehaviour
         {
             Debug.LogWarning("No SpriteRenderer found on " + gameObject.name + ". Adding one automatically.");
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        }
+
+        // Get or add Rigidbody2D
+        rb2D = GetComponent<Rigidbody2D>();
+        if (rb2D == null)
+        {
+            Debug.LogWarning("No Rigidbody2D found on " + gameObject.name + ". Adding one automatically.");
+            rb2D = gameObject.AddComponent<Rigidbody2D>();
         }
 
         // Make sure the player has a collider for interactions
@@ -66,17 +83,23 @@ public class PlayerMover : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        Vector3 move = new Vector3(moveX, moveY, 0f).normalized;
-        //transform.position += move * moveSpeed * Time.deltaTime;
-        GetComponent<Rigidbody2D>().MovePosition(transform.position + move * moveSpeed * Time.deltaTime);
+        Vector2 inputMovement = new Vector2(moveX, moveY).normalized;
 
-        // 動畫控制
-        if (move.magnitude > 0.1f)
+        // Check for wall collisions and get allowed movement
+        Vector2 allowedMovement = CheckWallCollision(inputMovement);
+        //transform.position += move * moveSpeed * Time.deltaTime;
+        // Apply movement using Rigidbody2D
+        if (allowedMovement.magnitude > 0.01f)
         {
+            Vector2 newPosition = rb2D.position + allowedMovement * moveSpeed * Time.deltaTime;
+            rb2D.MovePosition(newPosition);
+
+            // Animate walking
             AnimateWalk();
         }
         else
         {
+            // Stop at idle sprite when not moving
             if (walkSprites.Length > 0)
             {
                 spriteRenderer.sprite = walkSprites[0];
@@ -84,6 +107,56 @@ public class PlayerMover : MonoBehaviour
             }
         }
     }
+
+    Vector2 CheckWallCollision(Vector2 intendedMovement)
+    {
+        Vector2 currentPos = rb2D.position;
+        Vector2 allowedMovement = Vector2.zero;
+
+        // Check horizontal movement
+        // Check horizontal movement
+        if (Mathf.Abs(intendedMovement.x) > 0.01f)
+        {
+            Vector2 horizontalTarget = currentPos + Vector2.right * Mathf.Sign(intendedMovement.x) * collisionCheckDistance;
+
+            // Use CircleCast for more accurate collision detection
+            RaycastHit2D horizontalHit = Physics2D.CircleCast(
+                currentPos,
+                collisionRadius,
+                Vector2.right * Mathf.Sign(intendedMovement.x),
+                collisionCheckDistance,
+                wallLayerMask
+            );
+
+            if (horizontalHit.collider == null)
+            {
+                allowedMovement.x = intendedMovement.x;
+            }
+        }
+
+        // Check vertical movement
+        if (Mathf.Abs(intendedMovement.y) > 0.01f)
+        {
+            Vector2 verticalTarget = currentPos + Vector2.up * Mathf.Sign(intendedMovement.y) * collisionCheckDistance;
+
+            // Use CircleCast for more accurate collision detection
+            RaycastHit2D verticalHit = Physics2D.CircleCast(
+                currentPos,
+                collisionRadius,
+                Vector2.up * Mathf.Sign(intendedMovement.y),
+                collisionCheckDistance,
+                wallLayerMask
+            );
+
+            if (verticalHit.collider == null)
+            {
+                allowedMovement.y = intendedMovement.y;
+            }
+        }
+
+        return allowedMovement;
+    }
+
 
     void AnimateWalk()
     {
