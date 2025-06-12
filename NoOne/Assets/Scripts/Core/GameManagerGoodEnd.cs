@@ -60,6 +60,9 @@ public class GameManagerGoodEnd : MonoBehaviour
 
     void SetupAudio()
     {
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
         // Play background music
         if (backgroundMusic != null)
         {

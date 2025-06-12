@@ -415,10 +415,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundMusic: {fileID: 8300000, guid: f68ee5a24e7eb0642b22f35550c6b0b7, type: 3}
   audioSource: {fileID: 0}
+  backgroundMusicVolume: 0.3
   dialoguePanel: {fileID: 1743164724}
   dialogueText: {fileID: 478625061}
   typingSpeed: 0.05
   endingText: "\u7576\u7CEF\u7C73\u775C\u958B\u773C\u775B\u7684\u6642\u5019\uFF0C\u770B\u5230\u7684\u662F\u964C\u751F\u7684\u5929\u82B1\u677F...\n\u7136\u5F8C\u8EAB\u908A\u50B3\u4F86\u7684\u662F\u7238\u7238\u5ABD\u5ABD\u8AAC\u8A71\u7684\u8072\u97F3\uFF0C\u6025\u5207\u5730\u95DC\u5FC3\u5728\u7CEF\u7C73\u8033\u908A\u50B3\u4F86\n\u597D\u50CF\u505A\u4E86\u4E00\u5834\u602A\u5922......\u7CEF\u7C73\u60F3\u8457\u7CEF\u7C73\u64B2\u5411\u7238\u7238\u5ABD\u5ABD\u7684\u61F7\u62B1\u561F\u56D4\u8457\u60F3\u8981\u591A\u966A\u966A\u81EA\u5DF1\uFF0C\u4E0D\u60F3\u8981\u4E00\u500B\u4EBA\n\u7238\u7238\u5ABD\u5ABD\u5011\u4F3C\u4E4E\u4E5F\u610F\u8B58\u5230\u4E86\u932F\u8AA4\uFF1A\"\u5C0D\u4E0D\u8D77\u5BF6\u8C9D...\u4EE5\u5F8C\u518D\u4E5F\u4E0D\u6703\u6C92\u6709\u4EBA\u966A\u8457\u4F60\u5566...\""
+  typingSound: {fileID: 8300000, guid: 52988d954978e2f42a478762c72d8db6, type: 3}
+  typingAudioSource: {fileID: 0}
+  typingVolume: 0.2
+  playTypingSoundOnEveryChar: 0
+  nextBlockSound: {fileID: 8300000, guid: 515155760ec134945a84635db3a64528, type: 3}
+  nextBlockAudioSource: {fileID: 0}
+  nextBlockVolume: 0.5
 --- !u!1 &709298130
 GameObject:
   m_ObjectHideFlags: 0
