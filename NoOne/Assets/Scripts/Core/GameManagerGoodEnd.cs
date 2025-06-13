@@ -11,24 +11,31 @@ public class GameManagerGoodEnd : MonoBehaviour
     public float backgroundMusicVolume = 0.3f;
 
     [Header("UI References")]
+    public GameObject quitButton; // Reference to the quit button
     public GameObject dialoguePanel;
     public Text dialogueText;
 
     [Header("Settings")]
-    public float typingSpeed = 0.05f;
+    public float typingSpeed = 0.1f;
+    public float timeBetweenTexts = 1f; // Pause between text segments
 
     // The good ending text - editable in inspector
-    [TextArea(5, 10)]
-    public string endingText = "當糯米睜開眼睛的時候,看到的是陌生的天花板...然後身邊傳來的是爸爸媽媽説話的聲音,急切地關心在糯米耳邊傳來\n好像做了一場怪夢...糯米想著糯米撲向爸爸媽媽的懷抱嘟囔著想要多陪陪自己,不想要一個人\n爸爸媽媽們似乎也意識到了錯誤：\"對不起寶貝...以後再也不會沒有人陪著你啦...\"";
-    
+    [TextArea(3, 8)]
+    public string[] endingTexts = new string[]
+    {
+        "當糯米睜開眼睛的時候,看到的是陌生的天花板...\n然後身邊傳來的是爸爸媽媽説話的聲音,急切地關心在糯米耳邊傳來\n\"好像做了一場怪夢...\"糯米想著",
+        "糯米撲向爸爸媽媽的懷抱嘟囔著想要多陪陪自己\n不想要一個人, 爸爸媽媽們似乎也意識到了錯誤：\n\"對不起寶貝...以後再也不會沒有人陪著你啦...\""
+    };
+
     private bool isTyping = false;
     private SimpleEyeOpeningEffect eyeEffect;
-
+    private int currentTextIndex = 0;
+    private bool dialogueComplete = false;
 
     [Header("Typing Audio")]
     public AudioClip typingSound;
     public AudioSource typingAudioSource;
-    public float typingVolume = 0.2f;
+    public float typingVolume = 0.5f;
     public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
 
     [Header("Next Block Audio")]
@@ -129,7 +136,7 @@ public class GameManagerGoodEnd : MonoBehaviour
         yield return StartCoroutine(PlayEyeOpeningEffect());
 
         // Now start dialogue
-        yield return StartCoroutine(ShowDialogue());
+        yield return StartCoroutine(ShowAllDialogues());
     }
 
     IEnumerator PlayEyeOpeningEffect()
@@ -144,7 +151,25 @@ public class GameManagerGoodEnd : MonoBehaviour
         yield return new WaitForSeconds(totalDuration);
     }
 
-    IEnumerator ShowDialogue()
+    IEnumerator ShowAllDialogues()
+    {
+        // Show each text in the array
+        for (int i = 0; i < endingTexts.Length; i++)
+        {
+            currentTextIndex = i;
+            yield return StartCoroutine(ShowSingleDialogue(endingTexts[i]));
+
+            // Wait between texts (except for the last one)
+            if (i < endingTexts.Length - 1)
+            {
+                yield return new WaitForSeconds(timeBetweenTexts);
+            }
+        }
+
+        dialogueComplete = true;
+    }
+
+    IEnumerator ShowSingleDialogue(string textToShow)
     {
         isTyping = true;
 
@@ -154,7 +179,7 @@ public class GameManagerGoodEnd : MonoBehaviour
             // Start typing sound
             StartTypingSound();
 
-            foreach (char c in endingText)
+            foreach (char c in textToShow)
             {
                 dialogueText.text += c;
                 yield return new WaitForSeconds(typingSpeed);
@@ -172,25 +197,127 @@ public class GameManagerGoodEnd : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             PlayNextBlockSound();
+
             if (isTyping)
             {
-                // Skip typing
-                StopAllCoroutines();
-                if (dialogueText != null)
-                {
-                    dialogueText.text = endingText;
-                }
-                isTyping = false;
+                // Skip current typing
+                SkipCurrentTyping();
+            }
+            else if (!dialogueComplete)
+            {
+                // If not all dialogues are shown, skip to next
+                SkipToNextDialogue();
             }
             else
             {
-                // Close game or go to menu
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-                    Application.Quit();
-#endif
+                // All dialogues complete, exit game
+
+                dialoguePanel.SetActive(false);
+                quitButton.SetActive(true);
             }
         }
+    }
+
+    void SkipCurrentTyping()
+    {
+        StopAllCoroutines();
+        StopTyping();
+
+        if (dialogueText != null && currentTextIndex < endingTexts.Length)
+        {
+            dialogueText.text = endingTexts[currentTextIndex];
+        }
+
+        isTyping = false;
+    }
+
+    void SkipToNextDialogue()
+    {
+        StopAllCoroutines();
+        StopTyping();
+
+        // Show all text immediately and mark as complete
+        if (dialogueText != null)
+        {
+            // Combine all remaining texts
+            string allRemainingText = "";
+            for (int i = currentTextIndex; i < endingTexts.Length; i++)
+            {
+                allRemainingText += endingTexts[i];
+                if (i < endingTexts.Length - 1)
+                {
+                    allRemainingText += "\n\n"; // Add spacing between texts
+                }
+            }
+            dialogueText.text = allRemainingText;
+        }
+
+        dialogueComplete = true;
+        isTyping = false;
+    }
+
+    void ExitGame()
+    {
+        Debug.Log("GameManagerGoodEnd: Ending game...");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    // Public methods for external control
+    public void SetCurrentTextIndex(int index)
+    {
+        currentTextIndex = Mathf.Clamp(index, 0, endingTexts.Length - 1);
+    }
+
+    public void SkipAllDialogue()
+    {
+        SkipToNextDialogue();
+    }
+
+    public bool IsDialogueComplete()
+    {
+        return dialogueComplete;
+    }
+
+    public int GetCurrentTextIndex()
+    {
+        return currentTextIndex;
+    }
+
+    public int GetTotalTextCount()
+    {
+        return endingTexts.Length;
+    }
+
+    // Method to add text dynamically (optional)
+    public void AddEndingText(string newText)
+    {
+        System.Array.Resize(ref endingTexts, endingTexts.Length + 1);
+        endingTexts[endingTexts.Length - 1] = newText;
+    }
+
+    void OnDestroy()
+    {
+        // Clean up audio
+        StopAllCoroutines();
+        StopTyping();
+    }
+
+    public void QuitImmediately()
+    {
+        QuitGame();
+    }
+
+    void QuitGame()
+    {
+        Debug.Log("GameManagerBadEnd: Quitting game...");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

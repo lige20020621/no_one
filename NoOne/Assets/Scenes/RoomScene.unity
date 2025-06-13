@@ -526,9 +526,10 @@ MonoBehaviour:
   fireMusic: {fileID: 8300000, guid: 295c9bdf35431e44cbaa09f7572f717d, type: 3}
   startMusic: {fileID: 8300000, guid: 4fb2dc4d8cfaece449e8188a5c955158, type: 3}
   musicFadeTime: 0.5
+  backgroundMusicVolume: 0.5
   typingSound: {fileID: 8300000, guid: 52988d954978e2f42a478762c72d8db6, type: 3}
   typingAudioSource: {fileID: 0}
-  typingVolume: 0.2
+  typingVolume: 1
   playTypingSoundOnEveryChar: 0
   nextBlockSound: {fileID: 8300000, guid: 515155760ec134945a84635db3a64528, type: 3}
   nextBlockAudioSource: {fileID: 0}
@@ -581,8 +582,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000020325, y: -0}
-  m_SizeDelta: {x: 1269.6685, y: 194.4747}
+  m_AnchoredPosition: {x: 5.5366, y: -12.999993}
+  m_SizeDelta: {x: 1219.8396, y: 194.4747}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &595403024
 MonoBehaviour:
@@ -606,7 +607,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 6bae6eb6cead91348b36974d0644c746, type: 3}
-    m_FontSize: 48
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -616,7 +617,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: 
 --- !u!222 &595403025
 CanvasRenderer:
@@ -1174,7 +1175,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1dc27431874043a4c8587f5110a6b79c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 90b2820529c3f97499ca180dc5d91e4c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

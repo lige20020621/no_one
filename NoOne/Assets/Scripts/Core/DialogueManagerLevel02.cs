@@ -21,6 +21,7 @@ public class DialogueManagerLevel02 : MonoBehaviour
     public Image playerImage;           // 玩家圖像
     public Image npc1Image;              // NPC1圖像
     public Image npc2Image;              // NPC2圖像
+    public Image dialogueBlackBg;
     public GameObject backgroundImage;  // 背景圖像
     public GameObject dialoguePanel;    // 對話面板
     public GameObject resultPanel;    // 對話面板
@@ -38,7 +39,7 @@ public class DialogueManagerLevel02 : MonoBehaviour
     [Header("Typing Audio")]
     public AudioClip typingSound;
     public AudioSource typingAudioSource;
-    public float typingVolume = 0.2f;
+    public float typingVolume = 0.5f;
     public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
 
     [Header("Next Block Audio")]
@@ -51,8 +52,9 @@ public class DialogueManagerLevel02 : MonoBehaviour
 
         // 在Start中初始化完整對話序列
         InitializeAllDialogues();
-        StartFirstDialogue();
         SetupAudio();
+        StartFirstDialogue();
+     
     }
 
     void SetupAudio()
@@ -93,6 +95,7 @@ public class DialogueManagerLevel02 : MonoBehaviour
         {
             if (!playTypingSoundOnEveryChar)
             {
+                Debug.Log("StartTypingSound......+++");
                 // Play continuous typing sound
                 typingAudioSource.clip = typingSound;
                 typingAudioSource.Play();
@@ -268,7 +271,6 @@ public class DialogueManagerLevel02 : MonoBehaviour
     // 顯示當前對話塊
     private void DisplayCurrentDialogueBlock()
     {
-        Debug.Log("DisplayCurrentDialogueBlock!");
         if (currentBlockIndex < currentDialogue.Length)
         {
             NewDialogueBlock block = currentDialogue[currentBlockIndex];
@@ -300,7 +302,7 @@ public class DialogueManagerLevel02 : MonoBehaviour
                 // 旁白時隱藏所有角色圖像
                 npc1Image.gameObject.SetActive(false);
                 npc2Image.gameObject.SetActive(false);
-                playerImage.gameObject.SetActive(false);  // 添加這一行！
+                playerImage.gameObject.SetActive(false);
             }
 
             // 處理角色圖像
@@ -418,6 +420,7 @@ public class DialogueManagerLevel02 : MonoBehaviour
         }
         else
         {
+            dialogueBlackBg.enabled = false;
             // 第一段對話結束 - 延遲一幀再啟用玩家移動
             StartCoroutine(DelayedEnableMovement());
         }

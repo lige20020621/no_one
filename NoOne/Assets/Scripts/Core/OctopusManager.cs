@@ -54,11 +54,12 @@ public class OctopusManager : MonoBehaviour
         // Check if all octopuses are defeated
         if (defeatedOctopusCount >= 3)
         {
+
             StartCoroutine(OnAllOctopusesDefeated());
         }
     }
 
-    // Fix for CS0161: Ensure all code paths in OnAllOctopusesDefeated return a value.
+    // Ensure all code paths in OnAllOctopusesDefeated return a value.
     private System.Collections.IEnumerator OnAllOctopusesDefeated()
     {
         Debug.Log("All 3 octopuses defeated with 3 total hits! Starting secondary dialogue...");
@@ -74,6 +75,7 @@ public class OctopusManager : MonoBehaviour
         GameManagerLevel2 gameManager = GameManagerLevel2.instance;
         if (gameManager != null && gameManager.dialogueManager != null)
         {
+            yield return new WaitForSeconds(2f);
             gameManager.ShowActionPanel();
         }
 

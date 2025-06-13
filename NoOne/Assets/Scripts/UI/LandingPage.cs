@@ -7,28 +7,8 @@ using UnityEngine.EventSystems;
 
 public class LandingPage : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip backgroundMusic;
-
     public int sceneID;
     public GameObject whiteShadow;
-
-    void Start()
-    {
-        // Setup audio
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
-
-        // Play background music
-        if (backgroundMusic != null)
-        {
-            audioSource.clip = backgroundMusic;
-            audioSource.loop = true;
-            audioSource.volume = 0.3f;
-            audioSource.Play();
-        }
-    }
 
     public void onStartClick()
     {

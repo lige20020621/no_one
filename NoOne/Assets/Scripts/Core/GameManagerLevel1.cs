@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 
 public class GameManagerLevel1 : MonoBehaviour
@@ -16,6 +17,9 @@ public class GameManagerLevel1 : MonoBehaviour
 
     [Header("對話系統引用")]
     public NewDialogueManager dialogueManager; // 引用您的NewDialogueManager
+    public GameObject backgroundImage; // The GameObject with SpriteRenderer to update
+    public Sprite bgImage; // The sprite to change to when all items collected
+    private SpriteRenderer backgroundSpriteRenderer; // Cache the SpriteRenderer component
 
     [Header("收集完成後的行為")]
     public bool startDialogueAfterCollection = true; // 收集完成後是否開始對話
@@ -69,6 +73,7 @@ public class GameManagerLevel1 : MonoBehaviour
 
         // Setup fire button
         SetupFireButton();
+        SetupBackgroundRenderer();
 
     }
 
@@ -126,18 +131,33 @@ public class GameManagerLevel1 : MonoBehaviour
             // 檢查是否已收集所有物品
             if (collectedItemsCount >= totalItemsToCollect)
             {
-                // 所有物品都已收集，開始對話
-                OnAllItemsCollected();
+                StartCoroutine(
+                                // 所有物品都已收集，開始對話
+                                OnAllItemsCollected());
             }
         }
     }
 
-    // 當所有物品被收集時調用
-    void OnAllItemsCollected()
+    private void SetupBackgroundRenderer()
+    {
+        if (backgroundImage != null)
+        {
+            backgroundSpriteRenderer = backgroundImage.GetComponent<SpriteRenderer>();
+            if (backgroundSpriteRenderer == null)
+            {
+                Debug.LogWarning("GameManagerLevel1: Background GameObject doesn't have a SpriteRenderer component!");
+            }
+        }
+    }
+
+    // Fix for CS1624: Change the return type of OnAllItemsCollected from void to IEnumerator  
+    private IEnumerator OnAllItemsCollected()
     {
         Debug.Log("所有物品已收集完成！");
-
-        // 顯示完成通知
+        
+        yield return new WaitForSeconds(1f);
+        backgroundSpriteRenderer.sprite = bgImage;
+        // 顯示完成通知  
         if (notificationSystem != null)
         {
             notificationSystem.ShowAllItemsCollected();
@@ -145,12 +165,12 @@ public class GameManagerLevel1 : MonoBehaviour
 
         if (startDialogueAfterCollection && dialogueManager != null)
         {
-            // 稍微延遲一下再開始對話，讓通知有時間顯示
-            Invoke("StartDialogueSequence", 0.5f);
+            // 稍微延遲一下再開始對話，讓通知有時間顯示  
+            Invoke("StartDialogueSequence", 2f);
         }
         else
         {
-            // 如果沒有對話系統，可以在這裡添加其他完成後的行為
+            // 如果沒有對話系統，可以在這裡添加其他完成後的行為  
             Debug.Log("遊戲完成！");
         }
     }

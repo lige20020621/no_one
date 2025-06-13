@@ -286,10 +286,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalItemsToCollect: 3
   dialogueManager: {fileID: 0}
+  backgroundImage: {fileID: 242208938}
+  bgImage: {fileID: 21300000, guid: db213fc69334ae847b47797bc3da5066, type: 3}
   startDialogueAfterCollection: 1
   notificationSystem: {fileID: 0}
   backgroundMusic: {fileID: 8300000, guid: 19b3c2f1c2695b64d80eacbbf988e4aa, type: 3}
   audioSource: {fileID: 0}
+  backgroundMusicVolume: 0.3
   itemBackgroundMusic: {fileID: 8300000, guid: a217e9d34645cc744811361d43f9dfbc, type: 3}
   itemAudioSource: {fileID: 0}
   fireButton: {fileID: 962426977}
@@ -1250,7 +1253,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -594.53, y: 69}
+  m_AnchoredPosition: {x: -569.62, y: 77.8}
   m_SizeDelta: {x: 170.9332, y: 42.2234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1024921030
@@ -1266,7 +1269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8207547, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1275,7 +1278,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 6bae6eb6cead91348b36974d0644c746, type: 3}
-    m_FontSize: 36
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -1286,7 +1289,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Test
+  m_Text: '
 
 '
 --- !u!222 &1024921031
@@ -1331,8 +1334,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.7536, y: -51}
-  m_SizeDelta: {x: 1365.5071, y: 193.1145}
+  m_AnchoredPosition: {x: -5.9671, y: -51}
+  m_SizeDelta: {x: 1298.2336, y: 193.1145}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1038902829
 MonoBehaviour:
@@ -1356,7 +1359,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 6bae6eb6cead91348b36974d0644c746, type: 3}
-    m_FontSize: 48
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 4
@@ -1366,10 +1369,8 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: 'Test
-
-'
+    m_LineSpacing: 1.5
+  m_Text: 
 --- !u!222 &1038902830
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2213,6 +2214,13 @@ MonoBehaviour:
   backgroundRenderer: {fileID: 242208939}
   dialoguePanel: {fileID: 814817811}
   resultPanel: {fileID: 480152769}
+  typingSound: {fileID: 8300000, guid: 52988d954978e2f42a478762c72d8db6, type: 3}
+  typingAudioSource: {fileID: 0}
+  typingVolume: 0.4
+  playTypingSoundOnEveryChar: 0
+  nextBlockSound: {fileID: 8300000, guid: 515155760ec134945a84635db3a64528, type: 3}
+  nextBlockAudioSource: {fileID: 0}
+  nextBlockVolume: 0.5
 --- !u!4 &1549456474
 Transform:
   m_ObjectHideFlags: 0

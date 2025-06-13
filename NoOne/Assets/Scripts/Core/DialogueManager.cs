@@ -49,7 +49,7 @@ public class DialogueManager : MonoBehaviour
     public Button noButton;
 
     [Header("Dialogue Settings")]
-    public float typingSpeed = 0.03f;
+    public float typingSpeed = 0.1f;
 
     [Header("Dialogue Blocks")]
     public DialogueBlock[] dialogueBlocks;
@@ -70,13 +70,15 @@ public class DialogueManager : MonoBehaviour
     [Header("Typing Audio")]
     public AudioClip typingSound;
     public AudioSource typingAudioSource;
-    public float typingVolume = 0.2f;
+    public float typingVolume = 0.5f;
     public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
 
     [Header("Next Block Audio")]
     public AudioClip nextBlockSound;
     public AudioSource nextBlockAudioSource;
     public float nextBlockVolume = 0.5f;
+
+    private bool isFadeIn = true;
 
     void Start()
     {
@@ -175,7 +177,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (dialogueBox.activeSelf && Input.GetKeyDown(KeyCode.Space))
+        if (dialogueBox.activeSelf && Input.GetKeyDown(KeyCode.Space) && !isFadeIn)
         {
             PlayNextBlockSound();
 
@@ -208,6 +210,7 @@ public class DialogueManager : MonoBehaviour
                     else
                     {
                         dialogueBox.SetActive(false);
+                        characterImage.enabled = false;
                         ShowChoiceMenu();
                     }
                 }
@@ -217,13 +220,14 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator FadeInSequence()
     {
-        yield return new WaitForSeconds(0.5f); // Wait 1 second
-        yield return StartCoroutine(FadeCanvasGroup(characterCanvasGroup, 0f, 1f, 0.75f)); // Fade in player over 1 sec
+        yield return new WaitForSeconds(0.5f); // Wait 0.5 second
+        yield return StartCoroutine(FadeCanvasGroup(characterCanvasGroup, 0f, 1f, 0.75f)); // Fade in player over 0.75 sec
 
-        yield return new WaitForSeconds(0.5f); // Wait another second
-        yield return StartCoroutine(FadeCanvasGroup(dialogueBoxCanvasGroup, 0f, 1, 0.75f)); // Fade in dialogue box over 1 sec
+        yield return new WaitForSeconds(0.5f); // Wait another 0.5 second
+        yield return StartCoroutine(FadeCanvasGroup(dialogueBoxCanvasGroup, 0f, 1, 0.75f)); // Fade in dialogue box over 0.75 sec
 
-        yield return new WaitForSeconds(0.5f); // Wait 1 second
+        yield return new WaitForSeconds(0.5f); // Wait 0.5 second
+        isFadeIn = false;
         StartCoroutine(TypeLine()); // Start showing dialogue
     }
     IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float duration)
