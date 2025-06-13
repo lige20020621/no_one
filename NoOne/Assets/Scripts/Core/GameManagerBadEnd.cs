@@ -9,7 +9,7 @@ public class GameManagerBadEnd : MonoBehaviour
     public Text dialogueText;
 
     [Header("Dialogue Settings")]
-    public float typingSpeed = 0.05f;
+    public float typingSpeed = 0.1f;
 
     private bool isDisplayingText = false;
     private Coroutine typingCoroutine;
@@ -21,7 +21,6 @@ public class GameManagerBadEnd : MonoBehaviour
 
 
     [Header("Audio")]
-
     public AudioClip backgroundMusic;
     public AudioSource audioSource;
     public float backgroundMusicVolume = 0.3f;
@@ -29,13 +28,16 @@ public class GameManagerBadEnd : MonoBehaviour
     [Header("Typing Audio")]
     public AudioClip typingSound;
     public AudioSource typingAudioSource;
-    public float typingVolume = 0.2f;
+    public float typingVolume = 0.5f;
     public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
 
     [Header("Next Block Audio")]
     public AudioClip nextBlockSound;
     public AudioSource nextBlockAudioSource;
     public float nextBlockVolume = 0.5f;
+
+    [Header("UI")]
+    public GameObject quitButton; // Reference to the quit button
 
     void Start()
     {
@@ -212,18 +214,25 @@ public class GameManagerBadEnd : MonoBehaviour
         {
             dialoguePanel.SetActive(false);
         }
-
+        quitButton.SetActive(true);
         // Auto quit after showing ending
-        if (autoQuitAfterDialogue)
-        {
-            StartCoroutine(QuitGameAfterDelay());
-        }
+        //if (autoQuitAfterDialogue)
+        //{
+        //    StartCoroutine(QuitGameAfterDelay());
+        //}
     }
-
-    IEnumerator QuitGameAfterDelay()
+    void QuitGame()
     {
-        yield return new WaitForSeconds(2f);
+        Debug.Log("GameManagerBadEnd: Quitting game...");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
+    }
+    public void QuitImmediately()
+    {
+        QuitGame();
     }
 
 }

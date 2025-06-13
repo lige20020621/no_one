@@ -114,7 +114,6 @@ public class PlayerMover : MonoBehaviour
         Vector2 allowedMovement = Vector2.zero;
 
         // Check horizontal movement
-        // Check horizontal movement
         if (Mathf.Abs(intendedMovement.x) > 0.01f)
         {
             Vector2 horizontalTarget = currentPos + Vector2.right * Mathf.Sign(intendedMovement.x) * collisionCheckDistance;

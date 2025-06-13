@@ -23,7 +23,7 @@ public class NewDialogueBlock
     public Sprite backgroundSprite;      // 背景圖
     public bool hideCharacter;           // 是否隱藏人物
     public string speakerName;           // 說話者的名字（可選，用於顯示）
-    public float displaySpeed = 0.05f;   // 文字顯示速度（可選）
+    public float displaySpeed = 0.1f;   // 文字顯示速度（可選）
 }
 
 [System.Serializable]
@@ -70,6 +70,17 @@ public class NewDialogueManager : MonoBehaviour
     private PlayerMover playerMover;
     private Coroutine typingCoroutine;
 
+    [Header("Typing Audio")]
+    public AudioClip typingSound;
+    public AudioSource typingAudioSource;
+    public float typingVolume = 0.5f;
+    public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
+
+    [Header("Next Block Audio")]
+    public AudioClip nextBlockSound;
+    public AudioSource nextBlockAudioSource;
+    public float nextBlockVolume = 0.5f;
+
     private void Start()
     {
         // 確保對話面板一開始是隱藏的
@@ -97,6 +108,59 @@ public class NewDialogueManager : MonoBehaviour
 
         // 在Start中初始化完整對話序列
         InitializeAllDialogues();
+        SetupAudio();
+    }
+
+    void SetupAudio()
+    {
+        // Setup typing audio source
+        if (typingAudioSource == null)
+        {
+            GameObject typingGO = new GameObject("TypingAudioSource");
+            typingGO.transform.SetParent(transform);
+            typingAudioSource = typingGO.AddComponent<AudioSource>();
+        }
+        typingAudioSource.loop = true; // For continuous typing sound
+        typingAudioSource.volume = typingVolume;
+
+        // Setup next block audio source
+        if (nextBlockAudioSource == null)
+        {
+            GameObject nextBlockGO = new GameObject("NextBlockAudioSource");
+            nextBlockGO.transform.SetParent(transform);
+            nextBlockAudioSource = nextBlockGO.AddComponent<AudioSource>();
+        }
+        nextBlockAudioSource.loop = false;
+        nextBlockAudioSource.volume = nextBlockVolume;
+    }
+
+    void PlayNextBlockSound()
+    {
+        if (nextBlockSound != null && nextBlockAudioSource != null)
+        {
+            nextBlockAudioSource.PlayOneShot(nextBlockSound);
+        }
+    }
+
+    void StartTypingSound()
+    {
+        if (typingSound != null && typingAudioSource != null)
+        {
+            if (!playTypingSoundOnEveryChar)
+            {
+                // Play continuous typing sound
+                typingAudioSource.clip = typingSound;
+                typingAudioSource.Play();
+            }
+        }
+    }
+
+    void StopTyping()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
+        }
     }
 
     // 初始化完整對話序列
@@ -386,13 +450,15 @@ public class NewDialogueManager : MonoBehaviour
     {
         isDisplayingText = true;
         dialogueText.text = "";
-
+        // Start typing sound
+        StartTypingSound();
         foreach (char letter in fullText.ToCharArray())
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
-
+        // Stop typing sound
+        StopTyping();
         isDisplayingText = false;
         typingCoroutine = null;
     }
@@ -402,6 +468,7 @@ public class NewDialogueManager : MonoBehaviour
     {
         if (dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
+            PlayNextBlockSound();
             if (isDisplayingText)
             {
                 // 如果文字還在打字中，則立即顯示全部文字

@@ -206,6 +206,33 @@ public class MazePlayerController : MonoBehaviour
         canMove = true;
     }
 
+    Vector3 CalculateKnockbackDirection()
+    {
+        // Find the player
+        MazePlayerController player = FindObjectOfType<MazePlayerController>();
+        if (player != null)
+        {
+            // Calculate direction from player to octopus
+            Vector3 playerToOctopus = (transform.position - player.transform.position).normalized;
+            return playerToOctopus;
+        }
+
+        // Default to left if no player found
+        return Vector3.left;
+    }
+
+    System.Collections.IEnumerator HitAnimation(Vector3 knockbackDirection)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+        }
+        spriteRenderer.color = Color.white;
+    }
+
     // Collision detection for wall touching
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -213,6 +240,13 @@ public class MazePlayerController : MonoBehaviour
         if (IsWall(collision.gameObject))
         {
             Debug.Log("MazePlayerController: Hit wall! Resetting to initial position");
+
+            // Calculate knockback direction based on player position
+            Vector3 knockbackDirection = CalculateKnockbackDirection();
+
+            // Start hit animation with directional knockback
+            StartCoroutine(HitAnimation(knockbackDirection));
+
             StartCoroutine(ResetToInitialPosition());
         }
     }
@@ -228,7 +262,7 @@ public class MazePlayerController : MonoBehaviour
         canMove = false;
 
         // Wait for reset delay
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.25f);
 
         // Reset position
         transform.position = initialPosition;

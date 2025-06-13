@@ -8,7 +8,7 @@ public class Level3DialogueBlock
     public string text;                  // 對話內容
     public SpeakerType speaker;          // 誰在說話
     public string speakerName;           // 說話者的名字（可選，用於顯示）
-    public float displaySpeed = 0.05f;   // 文字顯示速度（可選）
+    public float displaySpeed = 0.1f;   // 文字顯示速度（可選）
 }
 
 public class MazeDialogueManager : MonoBehaviour
@@ -31,7 +31,7 @@ public class MazeDialogueManager : MonoBehaviour
     [Header("Typing Audio")]
     public AudioClip typingSound;
     public AudioSource typingAudioSource;
-    public float typingVolume = 0.2f;
+    public float typingVolume = 0.5f;
     public bool playTypingSoundOnEveryChar = false; // If false, plays continuously while typing
 
     [Header("Next Block Audio")]
