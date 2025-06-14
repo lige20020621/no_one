@@ -32,9 +32,6 @@ public class MazePlayerController : MonoBehaviour
 
     void Awake()
     {
-        // Store initial position
-        initialPosition = transform.position;
-
         // Add Rigidbody2D
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
         if (rb == null)
@@ -51,30 +48,39 @@ public class MazePlayerController : MonoBehaviour
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
-
-        // Setup player collider only if it doesn't exist
-        //CircleCollider2D playerCollider = GetComponent<CircleCollider2D>();
-        //if (playerCollider == null)
-        //{
-        //    playerCollider = gameObject.AddComponent<CircleCollider2D>();
-        //    playerCollider.radius = playerColliderRadius;
-        //    playerCollider.isTrigger = false; // Player collider should NOT be trigger
-        //    Debug.Log("MazePlayerController: Added CircleCollider2D to player");
-        //}
-        //else
-        //{
-        //    // Update existing collider settings
-        //    playerCollider.radius = playerColliderRadius;
-        //    playerCollider.isTrigger = false;
-        //}
-
-        //spriteRenderer.sprite = idleSprite;
     }
 
     void Start()
     {
+        // Store initial position
+        initialPosition = transform.position;
         // Awake already handled initialization
         Debug.Log("MazePlayerController: Player initialized successfully");
+
+        // Disable collision detection briefly at start
+        StartCoroutine(EnableCollisionAfterDelay());
+    }
+
+
+    IEnumerator EnableCollisionAfterDelay()
+    {
+        // Temporarily disable collision detection
+        Collider2D playerCollider = GetComponent<Collider2D>();
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = false;
+        }
+
+        // Wait a frame for everything to initialize
+        yield return new WaitForFixedUpdate();
+
+        // Re-enable collision detection
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = true;
+        }
+
+        Debug.Log("Collision detection enabled");
     }
 
     void Update()

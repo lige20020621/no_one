@@ -6,7 +6,7 @@ public class PlayerMover : MonoBehaviour
 
     public float moveSpeed = 5f;
     public Sprite[] walkSprites; // 3 walking images
-    public float animationSpeed = 0.1f; // time between sprite changes
+    public float animationSpeed = 0.5f; // time between sprite changes
 
     private bool canMove = true; // To disable movement during dialogue
     private SpriteRenderer spriteRenderer;
@@ -18,8 +18,15 @@ public class PlayerMover : MonoBehaviour
     public float collisionCheckDistance = 0.6f; // How far ahead to check for walls
     public float collisionRadius = 0.3f; // Radius for collision detection
 
+    [Header("Player Images")]
+    public Sprite idleSprite;
+    public Sprite moveSprite1;
+    public Sprite moveSprite2;
 
     private Rigidbody2D rb2D;
+    private Vector2 movement;
+    private bool isMoving = false;
+    private bool useFirstMoveSprite = true;
 
 
     private void Start()
@@ -27,7 +34,6 @@ public class PlayerMover : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
-            Debug.LogWarning("No SpriteRenderer found on " + gameObject.name + ". Adding one automatically.");
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
 
@@ -35,7 +41,6 @@ public class PlayerMover : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         if (rb2D == null)
         {
-            Debug.LogWarning("No Rigidbody2D found on " + gameObject.name + ". Adding one automatically.");
             rb2D = gameObject.AddComponent<Rigidbody2D>();
         }
 
@@ -43,7 +48,6 @@ public class PlayerMover : MonoBehaviour
         Collider2D collider = GetComponent<Collider2D>();
         if (collider == null)
         {
-            Debug.LogWarning("No Collider2D found on " + gameObject.name + ". Adding BoxCollider2D automatically.");
             BoxCollider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
 
             // Try to size the collider appropriately if we have a sprite
@@ -57,57 +61,74 @@ public class PlayerMover : MonoBehaviour
         // Make sure player has the "Player" tag
         if (gameObject.tag != "Player")
         {
-            Debug.LogWarning("Player GameObject doesn't have the 'Player' tag. Setting it automatically.");
             gameObject.tag = "Player";
         }
 
         // Check if we have valid sprites
         if (walkSprites == null || walkSprites.Length < 3)
         {
-            Debug.LogWarning("Not enough walk sprites assigned to PlayerMover on " + gameObject.name + ". Need at least 3 sprites.");
         }
         else if (spriteRenderer != null)
         {
             spriteRenderer.sprite = walkSprites[0]; // Set initial sprite
         }
-
-        // Make debug message to confirm initialization
-        Debug.Log("PlayerMover initialized on " + gameObject.name);
     }
 
     private void Update()
     {
+        HandleInput();
+        HandleMovement();
+        HandleAnimation();
+    }
 
-        if (!canMove)
-            return;
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
+    void HandleInput()
+    {
+        // Get raw input from player
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
 
-        Vector2 inputMovement = new Vector2(moveX, moveY).normalized;
+        // Create intended movement vector
+        Vector2 intendedMovement = new Vector2(inputX, inputY);
 
-        // Check for wall collisions and get allowed movement
-        Vector2 allowedMovement = CheckWallCollision(inputMovement);
-        //transform.position += move * moveSpeed * Time.deltaTime;
-        // Apply movement using Rigidbody2D
-        if (allowedMovement.magnitude > 0.01f)
+        // Apply wall collision check to prevent going outside screen
+        if (intendedMovement.magnitude > 0 && canMove)
         {
-            Vector2 newPosition = rb2D.position + allowedMovement * moveSpeed * Time.deltaTime;
-            rb2D.MovePosition(newPosition);
-
-            // Animate walking
-            AnimateWalk();
+            Vector2 checkedMovement = CheckWallCollision(intendedMovement);
+            movement = checkedMovement;
         }
         else
         {
-            // Stop at idle sprite when not moving
-            if (walkSprites.Length > 0)
+            movement = Vector2.zero;
+        }
+        isMoving = movement.magnitude > 0;
+    }
+    void HandleMovement()
+    {
+        // Normalize diagonal movement
+        movement = movement.normalized;
+
+        // Move the player
+        transform.Translate(movement * moveSpeed * Time.deltaTime);
+    }
+    void HandleAnimation()
+    {
+        if (isMoving)
+        {
+            // Animate between two move sprites
+            animationTimer += Time.deltaTime;
+            if (animationTimer >= animationSpeed)
             {
-                spriteRenderer.sprite = walkSprites[0];
-                currentSpriteIndex = 0;
+                animationTimer = 0f;
+                useFirstMoveSprite = !useFirstMoveSprite;
+                spriteRenderer.sprite = useFirstMoveSprite ? moveSprite1 : moveSprite2;
             }
         }
+        else
+        {
+            // Idle state
+            spriteRenderer.sprite = idleSprite;
+        }
     }
-
     Vector2 CheckWallCollision(Vector2 intendedMovement)
     {
         Vector2 currentPos = rb2D.position;
@@ -188,15 +209,12 @@ public class PlayerMover : MonoBehaviour
         {
             spriteRenderer.sprite = walkSprites[0];
         }
-
-        Debug.Log("Player movement disabled");
     }
 
     // Method to enable movement (called when dialogue ends)
     public void EnableMovement()
     {
         canMove = true;
-        Debug.Log("Player movement enabled");
     }
 
     // Utility method to check if player is currently allowed to move

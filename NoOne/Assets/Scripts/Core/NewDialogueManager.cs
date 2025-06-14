@@ -138,6 +138,7 @@ public class NewDialogueManager : MonoBehaviour
     {
         if (nextBlockSound != null && nextBlockAudioSource != null)
         {
+            StopTyping();
             nextBlockAudioSource.PlayOneShot(nextBlockSound);
         }
     }
