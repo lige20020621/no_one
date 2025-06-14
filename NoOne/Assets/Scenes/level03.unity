@@ -210,6 +210,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 0.769
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 3.7
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -279,6 +287,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 22.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 0.83
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -348,6 +364,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 1.615
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 2.576
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -421,6 +445,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 3.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -644,6 +676,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 2.077
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 3.055
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -1041,7 +1081,7 @@ MonoBehaviour:
   colliderType: 2
   colliderRadius: 1.7
   boxSize: {x: 1, y: 1}
-  hideAfterCollection: 0
+  hideAfterCollection: 1
   hasCollectionAnimation: 0
   enableDebugLogs: 0
 --- !u!60 &501638330
@@ -1474,6 +1514,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 1.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 6.47
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1622,6 +1670,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 6.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1864,7 +1920,7 @@ MonoBehaviour:
   colliderType: 2
   colliderRadius: 0.5
   boxSize: {x: 1, y: 1}
-  hideAfterCollection: 0
+  hideAfterCollection: 1
   hasCollectionAnimation: 0
   enableDebugLogs: 0
 --- !u!60 &1181336011
@@ -2546,6 +2602,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 0.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 3.56
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 14
@@ -2619,6 +2683,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 1.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 12.79
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -2783,7 +2855,7 @@ MonoBehaviour:
   colliderType: 2
   colliderRadius: 1.4
   boxSize: {x: 1, y: 1}
-  hideAfterCollection: 0
+  hideAfterCollection: 1
   hasCollectionAnimation: 0
   enableDebugLogs: 0
 --- !u!60 &1404464598
@@ -2969,8 +3041,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1404662405}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.0972, y: -1.0407, z: 1}
-  m_LocalScale: {x: 0.72168773, y: 0.72168773, z: 0.72168773}
+  m_LocalPosition: {x: -10.1383, y: -1.01, z: 1}
+  m_LocalScale: {x: 0.6210287, y: 0.6210287, z: 0.6210287}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -3241,6 +3313,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 0.639
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 8.344
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -3310,6 +3390,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 23.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 0.795
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3540,6 +3628,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 8.34
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -4069,6 +4165,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 0.615
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 6.0498
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -4138,6 +4242,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 6.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -4335,7 +4447,7 @@ MonoBehaviour:
   colliderType: 2
   colliderRadius: 1.4
   boxSize: {x: 1, y: 1}
-  hideAfterCollection: 0
+  hideAfterCollection: 1
   hasCollectionAnimation: 0
   enableDebugLogs: 0
 --- !u!60 &2032971117
@@ -4498,6 +4610,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1469359519}
     m_Modifications:
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.x
+      value: 6.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3471478021879269720, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: fixedColliderSize.y
+      value: 0.8375
+      objectReference: {fileID: 0}
     - target: {fileID: 5608266574270411664, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -4557,6 +4677,34 @@ PrefabInstance:
     - target: {fileID: 5608266574270411670, guid: 8070b26776e20c145a20837621ace96e, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 19.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 10.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 19.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 10.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010289947832292435, guid: 8070b26776e20c145a20837621ace96e, type: 3}
+      propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8070b26776e20c145a20837621ace96e, type: 3}
